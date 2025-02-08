@@ -11,7 +11,7 @@ import { ValidateEmailDto } from './request/validateEmail.dto';
 import { ValidateEmailSmsEntity } from '../auth-validate/entity/ValidateEmailSms.entity';
 import { RecoverPasswordDto } from './request/recoverPassword.dto';
 import {Not} from 'typeorm';
-import { Review } from '../product/entity/ReviewEntity.entity';
+import { Review } from './entity/ReviewEntity.entity';
 import { CreateProductRequest } from '../product/request/CreateProductRequest.request';
 import { CreateReviewRequest } from '../product/request/CreateReview.request';
 

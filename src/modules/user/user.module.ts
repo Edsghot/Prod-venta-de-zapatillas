@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entity/UserEntity.entity';
 import { ValidateService } from 'src/Common/Validate/validate.service';
 import { ValidateEmailSmsEntity } from '../auth-validate/entity/ValidateEmailSms.entity';
-import { Review } from '../product/entity/ReviewEntity.entity';
+import { Review } from './entity/ReviewEntity.entity';
 
 @Module({
   imports: [

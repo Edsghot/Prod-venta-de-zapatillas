@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Product } from './entity/ProductEntity.entity';
 import { CreateProductRequest } from './request/CreateProductRequest.request';
 import { UpdateProductRequest } from './request/UpdateProductRequest.request';
-import { Review } from './entity/ReviewEntity.entity';
+import { Review } from '../user/entity/ReviewEntity.entity';
 import moment from 'moment';
 
 @Injectable()
