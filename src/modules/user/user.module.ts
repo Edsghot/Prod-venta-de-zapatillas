@@ -9,8 +9,7 @@ import { Review } from './entity/ReviewEntity.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
-    TypeOrmModule.forFeature([ValidateEmailSmsEntity]),TypeOrmModule.forFeature([Review])
+    TypeOrmModule.forFeature([User,ValidateEmailSmsEntity,Review]),
   ],
   providers: [UserService,ValidateService],
   controllers: [UserController]

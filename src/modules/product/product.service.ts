@@ -11,9 +11,7 @@ import moment from 'moment';
 export class ProductService {
     constructor(
         @InjectRepository(Product)
-        private readonly productRepository: Repository<Product>,
-        @InjectRepository(Review)
-        private readonly reviewRepository: Repository<Review>,
+        private readonly productRepository: Repository<Product>
     ) {}
 
     async insertProduct(request: CreateProductRequest) {
