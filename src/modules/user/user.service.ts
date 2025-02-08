@@ -11,6 +11,9 @@ import { ValidateEmailDto } from './request/validateEmail.dto';
 import { ValidateEmailSmsEntity } from '../auth-validate/entity/ValidateEmailSms.entity';
 import { RecoverPasswordDto } from './request/recoverPassword.dto';
 import {Not} from 'typeorm';
+import { Review } from '../product/entity/ReviewEntity.entity';
+import { CreateProductRequest } from '../product/request/CreateProductRequest.request';
+import { CreateReviewRequest } from '../product/request/CreateReview.request';
 
 @Injectable()
 export class UserService {
@@ -21,10 +24,53 @@ export class UserService {
         private validateService: ValidateService,
         @InjectRepository(ValidateEmailSmsEntity)
         private validateRepository: Repository<ValidateEmailSmsEntity>,
+        @InjectRepository(Review)
+        private reviewRepository: Repository<Review>,
       ) {
       }
     
+      async createreview(request: CreateReviewRequest) {
+        try {
+            var entity = new Review();
 
+            entity.IdProduct = request.IdProduct;
+            entity.IdClient = request.IdClient;
+            var client = await this.userRepository.findOne({where:{IdUser:request.IdClient}});
+            if(client == null){
+              return { msg: 'No se encontro al cliente', success: false };
+            }
+            entity.NameClient = client.FirstName + ' ' + client.LastName;
+            entity.starts = request.starts;
+            entity.Comment = request.Comment;
+            entity.Date = moment.tz('America/Lima').toDate();
+            const newReview = this.reviewRepository.create(request);
+
+            await this.reviewRepository.save(newReview);
+            return { msg: 'Comentario insertado con exito!', success: true };
+        } catch (error) {
+            return { msg: 'Error al insertar comentario', detailMsg: error.message, success: false };
+        }
+    }
+
+    async getAllByProduct(idProduct: number) {
+      try {
+          var review = await this.reviewRepository.find({where:{IdProduct:idProduct}});
+
+          return { msg: 'data',data: review, success: true };
+      } catch (error) {
+          return { msg: 'error al obtener la data', detailMsg: error.message, success: false };
+      }
+      
+    }
+     async  getReviewByid(idReview: number){
+      try {
+        var review = await this.reviewRepository.findOne({where:{IdReview:idReview}});
+
+            return { msg: 'data',data: review, success: true };
+        } catch (error) {
+            return { msg: 'error al obtener la data', detailMsg: error.message, success: false };
+        }
+     }
   /*async insertUser(request: CreateUserRequest) {
     try {
       let band: { success: boolean, msg: string };

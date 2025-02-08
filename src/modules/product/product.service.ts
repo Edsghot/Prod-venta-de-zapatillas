@@ -4,12 +4,16 @@ import { Repository } from 'typeorm';
 import { Product } from './entity/ProductEntity.entity';
 import { CreateProductRequest } from './request/CreateProductRequest.request';
 import { UpdateProductRequest } from './request/UpdateProductRequest.request';
+import { Review } from './entity/ReviewEntity.entity';
+import moment from 'moment';
 
 @Injectable()
 export class ProductService {
     constructor(
         @InjectRepository(Product)
         private readonly productRepository: Repository<Product>,
+        @InjectRepository(Review)
+        private readonly reviewRepository: Repository<Review>,
     ) {}
 
     async insertProduct(request: CreateProductRequest) {
@@ -128,4 +132,6 @@ export class ProductService {
             }; 
         }
     }
+
+  
 }

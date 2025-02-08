@@ -7,6 +7,7 @@ import { LoginUserRequest } from './request/LoginUserRequest.request';
 import { DateRangeDto } from './request/DateRangeDto.dto';
 import { ValidateEmailDto } from './request/validateEmail.dto';
 import { RecoverPasswordDto } from './request/recoverPassword.dto';
+import { CreateReviewRequest } from '../product/request/CreateReview.request';
 
 @Controller('api/user')
 export class UserController {
@@ -62,5 +63,20 @@ export class UserController {
     @Put('recoverPassword')
     async recoverPassword(@Body() update: RecoverPasswordDto) {
         return await this.userService.recoverPassword(update);
+    }
+
+    @Post('CreateReview')
+    async createReview(@Body() request: CreateReviewRequest) {
+        return await this.userService.createreview(request);
+    }
+
+    @Get('getReviewsByProduct/:idProduct')
+    async getReviewsByProduct(@Param('idProduct') idProduct: number) {
+        return await this.userService.getAllByProduct(idProduct);
+    }
+
+    @Get('getReviewById/:idReview')
+    async getReviewById(@Param('idReview') idReview: number) {
+        return await this.userService.getReviewByid(idReview);
     }
 }

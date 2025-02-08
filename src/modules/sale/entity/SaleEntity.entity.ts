@@ -44,6 +44,9 @@ export class Sale {
   @Column()
   ImagePayment: string;
 
+  @Column()
+  FollowUp: number;
+
   @OneToOne(() => Tracking, (tracking) => tracking.Sale)
   Tracking?: Tracking;
 

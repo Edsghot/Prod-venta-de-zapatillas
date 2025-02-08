@@ -6,6 +6,7 @@ import { UserService } from '../user/user.service';
 import { Product } from './entity/ProductEntity.entity';
 import { ProductService } from './product.service';
 import { CloudinaryService } from 'src/ServicesCloud/cloudinary/cloudinary.service';
+import { Review } from './entity/ReviewEntity.entity';
 
 @Module({
   imports: [

@@ -5,13 +5,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entity/UserEntity.entity';
 import { ValidateService } from 'src/Common/Validate/validate.service';
 import { ValidateEmailSmsEntity } from '../auth-validate/entity/ValidateEmailSms.entity';
+import { Review } from '../product/entity/ReviewEntity.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
-    TypeOrmModule.forFeature([ValidateEmailSmsEntity]),
+    TypeOrmModule.forFeature([ValidateEmailSmsEntity]),TypeOrmModule.forFeature([Review])
   ],
   providers: [UserService,ValidateService],
   controllers: [UserController]
 })
+
 export class UserModule {}
