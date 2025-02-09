@@ -271,6 +271,13 @@ export class SaleService {
     }
   }
 
+  async hasClientPurchases(clientId: number): Promise<boolean> {
+    const purchases = await this.saleRepository.findOne({
+        where: { Client: { IdUser: clientId } }
+    });
+    return !!purchases;
+}
+
   async counts() {
     try {
       const resultUser = await this.userRepository.query('SELECT COUNT(*) FROM user WHERE Rol=0 and Deleted=false');

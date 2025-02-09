@@ -8,6 +8,8 @@ import { DateRangeDto } from './request/DateRangeDto.dto';
 import { ValidateEmailDto } from './request/validateEmail.dto';
 import { RecoverPasswordDto } from './request/recoverPassword.dto';
 import { CreateReviewRequest } from '../product/request/CreateReview.request';
+import { UpdateReviewRequest } from '../product/request/UpdateReview.request';
+import { DeleteReview } from './request/DeleteReview.request';
 
 @Controller('api/user')
 export class UserController {
@@ -67,16 +69,32 @@ export class UserController {
 
     @Post('CreateReview')
     async createReview(@Body() request: CreateReviewRequest) {
-        return await this.userService.createreview(request);
+        return await this.userService.createReview(request);
     }
 
     @Get('getReviewsByProduct/:idProduct')
     async getReviewsByProduct(@Param('idProduct') idProduct: number) {
-        return await this.userService.getAllByProduct(idProduct);
+        return await this.userService.getReviewsByProduct(idProduct);
     }
 
     @Get('getReviewById/:idReview')
     async getReviewById(@Param('idReview') idReview: number) {
-        return await this.userService.getReviewByid(idReview);
+        return await this.userService.getReviewById(idReview);
+    }
+    @Get('GetAllReviews')
+    async GetAllReviews() {
+        return await this.userService.getAllReviews();
+    }
+
+    @Put('UpdateReview')
+    async UpdateReview(
+        @Body() request: UpdateReviewRequest
+    ) {
+        return await this.userService.updateReview( request);
+    }
+
+    @Delete('DeleteReview')
+    async DeleteReview(@Body() review: DeleteReview) {
+        return await this.userService.deleteReview(review);
     }
 }

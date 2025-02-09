@@ -18,6 +18,7 @@ import { Shipment } from '../shipment/entity/ShipmentEntity.entity';
     TypeOrmModule.forFeature([ValidateEmailSmsEntity]),TypeOrmModule.forFeature([Product]),TypeOrmModule.forFeature([Shipment])
   ],
   providers: [SaleService,AuthValidateService,CloudinaryService],
-  controllers: [SaleController]
+  controllers: [SaleController],
+  exports: [SaleService] 
 })
 export class SaleModule {}

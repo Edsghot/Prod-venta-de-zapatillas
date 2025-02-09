@@ -5,6 +5,8 @@ import { UpdateProductRequest } from './request/UpdateProductRequest.request';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FOLDER_PAYMENT } from 'src/Common/constants/constantService';
 import { CloudinaryService } from 'src/ServicesCloud/cloudinary/cloudinary.service';
+import { CreateSizeRequest } from './request/CreateSize.request';
+import { UpdateSizeRequest } from './request/UpdateSizeRequest.request';
 
 @Controller('api/product')
 export class ProductController {
@@ -55,5 +57,34 @@ export class ProductController {
     @Delete('/delete/:id')
     async deleteProduct(@Param('id') id: number) {
       return await this.productService.deleteProduct(id);
+    }
+    @Post('CreateSize')
+    async CreateSize(@Body() size: CreateSizeRequest) {
+        return await this.productService.createSize(size);
+    }
+
+    @Put('UpdateSize')
+    async UpdateSize(@Body() size: UpdateSizeRequest) {
+        return await this.productService.updateSize(size.IdSize, size);
+    }
+
+    @Delete('DeleteSize/:id')
+    async DeleteSize(@Param('id') id: number) {
+        return await this.productService.deleteSize(id);
+    }
+
+    @Get('GetAllSizes')
+    async GetAllSizes() {
+        return await this.productService.getAllSizes();
+    }
+
+    @Get('GetSizeById/:id')
+    async GetSizeById(@Param('id') id: number) {
+        return await this.productService.getSizeById(id);
+    }
+
+    @Get('GetSizesByProduct/:productId')
+    async GetSizesByProduct(@Param('productId') productId: number) {
+        return await this.productService.getSizesByProduct(productId);
     }
 }

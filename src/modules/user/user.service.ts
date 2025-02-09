@@ -14,6 +14,11 @@ import {Not} from 'typeorm';
 import { Review } from './entity/ReviewEntity.entity';
 import { CreateProductRequest } from '../product/request/CreateProductRequest.request';
 import { CreateReviewRequest } from '../product/request/CreateReview.request';
+import { Product } from '../product/entity/ProductEntity.entity';
+import { UpdateReviewRequest } from '../product/request/UpdateReview.request';
+import { DeleteReview } from './request/DeleteReview.request';
+import { UserController } from './user.controller';
+import { SaleService } from '../sale/sale.service';
 
 @Injectable()
 export class UserService {
@@ -26,51 +31,184 @@ export class UserService {
         private validateRepository: Repository<ValidateEmailSmsEntity>,
         @InjectRepository(Review)
         private reviewRepository: Repository<Review>,
+        @InjectRepository(Product)
+        private productRepository: Repository<Product>,
+        private saleService: SaleService,
       ) {
       }
     
-      async createreview(request: CreateReviewRequest) {
+      async getAllReviews() {
         try {
-            var entity = new Review();
+            const reviews = await this.reviewRepository.find();
+            return { 
+                msg: 'Reviews obtenidas exitosamente',
+                data: reviews, 
+                success: true 
+            };
+        } catch (error) {
+            return { 
+                msg: 'Error al obtener las reseñas', 
+                detailMsg: error.message, 
+                success: false 
+            };
+        }
+    }
+    
+    async createReview(request: CreateReviewRequest) {
+        try {
 
+          const hasPurchases = await this.saleService.hasClientPurchases(request.IdClient);
+          if (!hasPurchases) {
+              return { 
+                  msg: 'El cliente debe tener al menos una compra para poder comentar', 
+                  success: false 
+              };
+          }
+
+            const entity = new Review();
             entity.IdProduct = request.IdProduct;
+             
+            const product = await this.productRepository.findOne({
+              where: { IdProduct: request.IdProduct }
+          });
+          
+          if (!product) {
+              return { msg: 'Producto no encontrado', success: false };
+          }
+          
             entity.IdClient = request.IdClient;
-            var client = await this.userRepository.findOne({where:{IdUser:request.IdClient}});
-            if(client == null){
-              return { msg: 'No se encontro al cliente', success: false };
+            
+            const client = await this.userRepository.findOne({
+                where: { IdUser: request.IdClient }
+            });
+            
+            if (!client) {
+                return { msg: 'Cliente no encontrado', success: false };
             }
-            entity.NameClient = client.FirstName + ' ' + client.LastName;
+            
+            entity.NameClient = `${client.FirstName} ${client.LastName}`;
             entity.starts = request.starts;
             entity.Comment = request.Comment;
             entity.Date = moment.tz('America/Lima').toDate();
-            const newReview = this.reviewRepository.create(request);
-
-            await this.reviewRepository.save(newReview);
-            return { msg: 'Comentario insertado con exito!', success: true };
+    
+            await this.reviewRepository.save(entity);
+            return { msg: 'Reseña creada exitosamente', success: true };
         } catch (error) {
-            return { msg: 'Error al insertar comentario', detailMsg: error.message, success: false };
+            return { 
+                msg: 'Error al crear la reseña', 
+                detailMsg: error.message, 
+                success: false 
+            };
         }
     }
+    
+    async updateReview( request: UpdateReviewRequest) {
+        try {
+            const clientUpdate = await this.reviewRepository.findOne({where:{IdReview: request.IdReview,IdClient:request.IdClientUpdate}});
 
-    async getAllByProduct(idProduct: number) {
-      try {
-          var review = await this.reviewRepository.find({where:{IdProduct:idProduct}});
+            if (!clientUpdate) {
+              return { msg: 'No se encontro el comentario o el usuario que modifica no es el que lo creo', success: false };
+            }
 
-          return { msg: 'data',data: review, success: true };
-      } catch (error) {
-          return { msg: 'error al obtener la data', detailMsg: error.message, success: false };
-      }
+            const review = await this.reviewRepository.findOne({
+                where: { IdReview: request.IdReview }
+            });
+    
+            if (!review) {
+                return { msg: 'Reseña no encontrada', success: false };
+            }
+            const product = await this.productRepository.findOne({
+              where: { IdProduct: request.IdProduct }
+            });
+            
+            if (!product) {
+                return { msg: 'Producto no encontrado', success: false };
+            }
+            
+            review.IdClient = request.IdClient;
+              
+              const client = await this.userRepository.findOne({
+                  where: { IdUser: request.IdClient }
+              });
+              
+              if (!client) {
+                  return { msg: 'Cliente no encontrado', success: false };
+              }
+              
+              review.NameClient = `${client.FirstName} ${client.LastName}`;
       
-    }
-     async  getReviewByid(idReview: number){
-      try {
-        var review = await this.reviewRepository.findOne({where:{IdReview:idReview}});
-
-            return { msg: 'data',data: review, success: true };
-        } catch (error) {
-            return { msg: 'error al obtener la data', detailMsg: error.message, success: false };
+              review.starts = request.starts;
+              review.Comment = request.Comment;
+      
+              await this.reviewRepository.save(review);
+              return { msg: 'Reseña actualizada exitosamente', success: true };
+          } catch (error) {
+            return { 
+                msg: 'Error al actualizar la reseña', 
+                detailMsg: error.message, 
+                success: false 
+            };
         }
-     }
+    }
+    
+    async deleteReview(request: DeleteReview) {
+        try {
+            const review = await this.reviewRepository.findOne({
+                where: { IdReview: request.IdReview,IdClient:request.IdClient }
+            });
+    
+            if (!review) {
+                return { msg: 'Reseña no encontrada o verifique que sea el mismo cliente el que esta eliminando', success: false };
+            }
+    
+            await this.reviewRepository.remove(review);
+            return { msg: 'Reseña eliminada exitosamente', success: true };
+        } catch (error) {
+            return { 
+                msg: 'Error al eliminar la reseña', 
+                detailMsg: error.message, 
+                success: false 
+            };
+        }
+    }
+    
+    async getReviewsByProduct(idProduct: number) {
+        try {
+            const reviews = await this.reviewRepository.find({
+                where: { IdProduct: idProduct }
+            });
+            return { 
+                msg: 'Reseñas obtenidas exitosamente',
+                data: reviews, 
+                success: true 
+            };
+        } catch (error) {
+            return { 
+                msg: 'Error al obtener las reseñas', 
+                detailMsg: error.message, 
+                success: false 
+            };
+        }
+    }
+    
+    async getReviewById(idReview: number) {
+        try {
+            const review = await this.reviewRepository.findOne({
+                where: { IdReview: idReview }
+            });
+            return { 
+                msg: 'Reseña encontrada',
+                data: review, 
+                success: true 
+            };
+        } catch (error) {
+            return { 
+                msg: 'Error al obtener la reseña', 
+                detailMsg: error.message, 
+                success: false 
+            };
+        }
+    }
   /*async insertUser(request: CreateUserRequest) {
     try {
       let band: { success: boolean, msg: string };
