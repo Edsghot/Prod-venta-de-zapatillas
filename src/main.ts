@@ -12,7 +12,7 @@ async function bootstrap() {
     },
   });
 
-  // Habilitar la validación global
+  // Habilitar la validación globala
   app.useGlobalPipes(new ValidationPipe());
 
   const port = process.env.PORT || 5039;
