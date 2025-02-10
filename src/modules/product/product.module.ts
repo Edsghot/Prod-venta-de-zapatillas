@@ -11,7 +11,7 @@ import { SizeProd } from './entity/SizeEntity.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Product,SizeProd])
+    TypeOrmModule.forFeature([Product]),TypeOrmModule.forFeature([SizeProd])
   ],
   providers: [ProductService,CloudinaryService],
   controllers: [ProductController]
