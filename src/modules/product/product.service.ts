@@ -6,7 +6,7 @@ import { CreateProductRequest } from './request/CreateProductRequest.request';
 import { UpdateProductRequest } from './request/UpdateProductRequest.request';
 import { Review } from '../user/entity/ReviewEntity.entity';
 import moment from 'moment';
-import { Size } from './entity/SizeEntity.entity';
+import { SizeProd } from './entity/SizeEntity.entity';
 import { CreateSizeRequest } from './request/CreateSize.request';
 import { UpdateSizeRequest } from './request/UpdateSizeRequest.request';
 
@@ -15,8 +15,8 @@ export class ProductService {
     constructor(
         @InjectRepository(Product)
         private readonly productRepository: Repository<Product>,
-        @InjectRepository(Size)
-        private readonly sizeRepository: Repository<Size>,
+        @InjectRepository(SizeProd)
+        private readonly sizeRepository: Repository<SizeProd>,
         
     ) {}
 
@@ -139,7 +139,7 @@ export class ProductService {
 
     async createSize(request: CreateSizeRequest) {
         try {
-            var entity = new Size();
+            var entity = new SizeProd();
             entity.Name = request.Name;
             entity.Stock = request.Stock;
             entity.IdProduct = request.IdProduct;
