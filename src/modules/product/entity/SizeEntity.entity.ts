@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-Entity('sizes')
-export class Size {
+Entity('SizeProd')
+export class SizeProd {
     @PrimaryGeneratedColumn()
     IdSize: number;
 
