@@ -303,6 +303,100 @@ export class AuthValidateService {
   return res.resultOK("Se envio correctamente");
     }
 
+    async sendTracking(customerEmail: string, trackingNumber: number) {
+      var res = new ResMessage();
+  
+      let statusMessage = '';
+      switch(trackingNumber) {
+          case 0:
+              statusMessage = 'Pedido recibido';
+              break;
+          case 1:
+              statusMessage = 'En preparación';
+              break;
+          case 2:
+              statusMessage = 'En tránsito';
+              break;
+          case 3:
+              statusMessage = 'Entregado';
+              break;
+          case 4:
+              statusMessage = 'Cancelado';
+              break;
+          case 5:
+              statusMessage = 'En espera';
+              break;
+          default:
+              statusMessage = 'Estado desconocido';
+              break;
+      }
+  
+      await this.mailerService.sendMail(
+          {
+              to: customerEmail, // Aquí se utiliza el correo que se pasa como parámetro
+              from: 'josephpolixarpoperalta@gmail.com',
+              subject: `Estado del pedido: ${statusMessage}`,
+              text: `Estado del pedido: ${statusMessage}`,
+              html: `<div
+    style="
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    "
+  >
+    <div
+      style="
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          padding: 15px;
+          background-color: #c04751;
+          border-bottom: 2px solid #f0f0f0;
+        "
+      >
+        <h1 style="font-size: 24px; margin: 0; font-weight: bolder">
+          <span style="color: #fff">Moda y Estilo</span>
+        </h1>
+      </div>
+      <div style="padding: 20px; text-align: justify">
+        <h2 style="font-size: 22px; color: #333333">
+          <span style="color: #1a7eb9">Hola, </span> ${customerEmail} 🚀
+        </h2>
+        <p style="font-size: 16px; color: #555555">
+          Tu pedido está en estado: <strong>${statusMessage}</strong>. 📝
+        </p>
+      </div>
+      <div
+        style="
+          text-align: center;
+          padding: 5px;
+          background-color: #575d5e;
+          border-top: 2px solid #f0f0f0;
+        "
+      >
+        <p style="font-size: 14px; color: #fff; margin: 10px 0">
+          Enviado por Moda y Estilo
+        </p>
+      </div>
+    </div>
+  </div>
+  `,
+          }
+      );
+      return res.resultOK("Correo enviado correctamente");
+  }
+  
+
     async sendPaymentError(request: ReqErrorDto){
         var res = new ResMessage();
 

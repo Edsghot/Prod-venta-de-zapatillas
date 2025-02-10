@@ -298,29 +298,42 @@ async validateReview(clientId: number){
   };
 }
 
-async updateTraking(data: TrakingUpdateRequest){
-  const purchases = await this.saleRepository.findOne({
-      where: { IdSales: data.IdSale }
-  });
+async updateTraking(data: TrakingUpdateRequest) {
+  try {
+      const purchases = await this.saleRepository.findOne({
+          where: { IdSales: data.IdSale },
+          relations: ['Client'] // Add relation to get client data
+      });
 
-  if(!purchases){
-    return {
-      msg: 'No se encontro la compra',
-      success: false,
-    };
+      if (!purchases) {
+          return {
+              msg: 'No se encontro la compra',
+              success: false,
+          };
+      }
+
+      purchases.Traking = data.Traking;
+      purchases.TrakingDate = moment.tz('America/Lima').toDate();
+      
+      await this.saleRepository.save(purchases);
+
+      // Now we can safely access client email through relation
+      const clientEmail = purchases.Client.Mail;
+      await this.mailValidateService.sendTracking(clientEmail, purchases.Traking);
+
+      return {
+          msg: 'Se actualizo el traking',
+          success: true,
+      };
+  } catch (error) {
+      console.error('Error updating tracking:', error);
+      return {
+          msg: 'Error al actualizar el tracking',
+          detailMsg: error.message,
+          success: false
+      };
   }
-
-  purchases.Traking = data.Traking;
-  purchases.TrakingDate = moment.tz('America/Lima').toDate();
-  await this.saleRepository.save(purchases);
-
-  return {
-    msg: 'Se actualizo el traking',
-    success: true,
-  };
-  }
-
-
+}
 
   async counts() {
     try {
