@@ -8,23 +8,4 @@ import { UpdateTrackingDto } from './request/update-tracking.dto';
 export class TrackingController {
     constructor(private readonly trackingService: TrackingService) {}
 
-    @Post()
-    async create(@Body() createTrackingDto: CreateTrackingDto) {
-        return this.trackingService.create(createTrackingDto);
-    }
-
-    @Get()
-    async getAll(): Promise<Tracking[]> {
-        return this.trackingService.getAll();
-    }
-
-    @Get('user/:idUser')
-    async getAllByUserId(@Param('idUser') idUser: number): Promise<Tracking[]> {
-        return this.trackingService.getAllByUserId(idUser);
-    }
-    
-    @Patch()
-  async update(@Body() updateTrackingDto: UpdateTrackingDto) {
-    return this.trackingService.update(updateTrackingDto);
-  }
 }

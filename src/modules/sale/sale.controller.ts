@@ -69,7 +69,7 @@ export class SaleController {
       return await this.saleService.counts();
     }
 
-    @Get('ValidateReview/:clientId')
+    @Get('/ValidateReview/:clientId')
     async ValidateReview(@Param('clientId') clientId: number) {
         return await this.saleService.validateReview(clientId);
     }
