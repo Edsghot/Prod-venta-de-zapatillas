@@ -39,18 +39,17 @@ export class SaleService {
     try {
       var stringPayment = ''+request.PaymentMethod;
       var stringShipping = ''+request.ShippingMethod;
-
       var boolPayment = false;
       var boolShippment = false;
-
+    
       if(stringPayment === 'true'){
         boolPayment = true;
       }
       if(stringShipping === 'true'){
         boolShippment = true;
       }
-
-
+    
+    
       let sale = new Sale();
       var user = await this.userRepository.findOne({ where: { IdUser: request.IdUser, Deleted: false } })
       if (!user) {
@@ -62,7 +61,7 @@ export class SaleService {
         return { msg: 'No se encontro el carrito', success: false };
       }
       sale.Cart = cart;
-
+    
       var nameMethod = "Delivery";
       sale.ShippingMethod = boolShippment;
       sale.PaymentMethod = boolPayment;
@@ -74,13 +73,14 @@ export class SaleService {
       sale.SaleDate = moment.tz('America/Lima').toDate();
       sale.idShipment = request.idShipment;
       sale.ImagePayment = request.ImagePayment;
-
+      sale.FollowUp = 0;
+    
       if(boolShippment){
         nameMethod = "Recojo en tienda";
       }
-
+    
         sale.Process = true;
-   
+    
         //Actualizar el stock de cada producto del carrito
         const cartItems = await this.cartItemRepository.find({
           where: { Cart: cart },relations: ['Product']
@@ -128,8 +128,7 @@ export class SaleService {
     } catch (error) {
       console.error('Error al insertar venta:', error);
       return { msg: 'Error al insertar venta', detailMsg: error.message, success: false };
-    }
-  }
+    }}
 
   async getAllSales() {
     try {
