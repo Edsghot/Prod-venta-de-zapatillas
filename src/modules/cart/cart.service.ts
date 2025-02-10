@@ -63,6 +63,7 @@ export class CartService {
                 newCartItem.Product = product;
                 newCartItem.DateAdded = new Date();
                 newCartItem.Quantity = request.Quantity;
+                newCartItem.SizeId = request.SizeId;
                 await this.cartItemRepository.save(newCartItem);
 
                 return {msg:"se agrego al carrito", success: true}

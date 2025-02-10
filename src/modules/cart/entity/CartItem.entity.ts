@@ -15,6 +15,9 @@ export class CartItem {
 
   @Column()
   Quantity: number;
+  
+  @Column()
+  SizeId: number;
 
   @Column('date')
   DateAdded: Date;

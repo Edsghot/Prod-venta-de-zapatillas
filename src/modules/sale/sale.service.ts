@@ -68,7 +68,6 @@ export class SaleService {
       sale.PaymentMethod = boolPayment;
       sale.Traking = 0;
       sale.TrakingDate = moment.tz('America/Lima').toDate();
-      sale.SizeId = request.SizeId;
       sale.PaymentNumber = Math.floor(1000 + Math.random() * 9000).toString();
       sale.CardNumber = request.CardNumber;
       sale.Total = request.Total;

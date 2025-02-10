@@ -14,5 +14,4 @@ export class CreateSaleRequest{
     Total: number;
     idShipment:number;
     ImagePayment: string;
-    SizeId: number;
 }
