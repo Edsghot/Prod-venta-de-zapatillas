@@ -69,7 +69,7 @@ export class SaleService {
       sale.Traking = 0;
       sale.TrakingDate = moment.tz('America/Lima').toDate();
       sale.PaymentNumber = Math.floor(1000 + Math.random() * 9000).toString();
-      sale.CardNumber = request.CardNumber;
+      sale.CardNumber = request.CardNumber?? "0";
       sale.Total = request.Total;
       sale.SaleDate = moment.tz('America/Lima').toDate();
       sale.idShipment = request.idShipment;
