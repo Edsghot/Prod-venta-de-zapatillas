@@ -14,10 +14,6 @@ export class Tracking {
 
   @Column()
   DateCreated: Date;
-  
-  @OneToOne(() => Sale, (sale) => sale.Tracking)
-  @JoinColumn({ name: 'idSale' })
-  Sale?: Sale;
 
   @Column()
   Deleted: boolean;

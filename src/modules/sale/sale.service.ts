@@ -14,6 +14,7 @@ import { DateRangeDto } from '../user/request/DateRangeDto.dto';
 import { Product } from '../product/entity/ProductEntity.entity';
 import { CartItem } from '../cart/entity/CartItem.entity';
 import { Shipment } from '../shipment/entity/ShipmentEntity.entity';
+import { TrakingUpdateRequest } from './request/TrakingUpdateRequest.request';
 
 @Injectable()
 export class SaleService {
@@ -65,6 +66,9 @@ export class SaleService {
       var nameMethod = "Delivery";
       sale.ShippingMethod = boolShippment;
       sale.PaymentMethod = boolPayment;
+      sale.Traking = 0;
+      sale.TrakingDate = moment.tz('America/Lima').toDate();
+      sale.SizeId = request.SizeId;
       sale.PaymentNumber = Math.floor(1000 + Math.random() * 9000).toString();
       sale.CardNumber = request.CardNumber;
       sale.Total = request.Total;
@@ -277,6 +281,47 @@ export class SaleService {
     });
     return !!purchases;
 }
+
+async validateReview(clientId: number){
+  const purchases = await this.saleRepository.findOne({
+      where: { Client: { IdUser: clientId } }
+  });
+
+  if(!purchases){
+    return {
+      msg: 'El cliente no hizo ni una compra',
+      success: false,
+    };
+  }
+  return {
+    msg: 'El cliente hizo al menos una compra',
+    success: true,
+  };
+}
+
+async updateTraking(data: TrakingUpdateRequest){
+  const purchases = await this.saleRepository.findOne({
+      where: { IdSales: data.IdSale }
+  });
+
+  if(!purchases){
+    return {
+      msg: 'No se encontro la compra',
+      success: false,
+    };
+  }
+
+  purchases.Traking = data.Traking;
+  purchases.TrakingDate = moment.tz('America/Lima').toDate();
+  await this.saleRepository.save(purchases);
+
+  return {
+    msg: 'Se actualizo el traking',
+    success: true,
+  };
+  }
+
+
 
   async counts() {
     try {

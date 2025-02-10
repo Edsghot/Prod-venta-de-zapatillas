@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { SaleService } from './sale.service';
 import { CreateSaleRequest } from './request/CreateSaleRequest.request';
 import { resPaymentDto } from './request/reqPaymentDto.dto';
@@ -6,6 +6,7 @@ import { CloudinaryService } from 'src/ServicesCloud/cloudinary/cloudinary.servi
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FOLDER_PAYMENT } from 'src/Common/constants/constantService';
 import { DateRangeDto } from '../user/request/DateRangeDto.dto';
+import { TrakingUpdateRequest } from './request/TrakingUpdateRequest.request';
 
 @Controller('api/sale')
 export class SaleController {
@@ -58,9 +59,18 @@ export class SaleController {
     async getSalesByDateRange(@Body() request: DateRangeDto) {
       return await this.saleService.getSalesByDateRange(request);
     }
+    @Put("/updateTraking")
+    async updateTrakingData(@Body() request: TrakingUpdateRequest) {
+      return await this.saleService.updateTraking(request);
+    }
 
     @Get("/counts")
     async counts() {
       return await this.saleService.counts();
+    }
+
+    @Get('ValidateReview/:clientId')
+    async ValidateReview(@Param('clientId') clientId: number) {
+        return await this.saleService.validateReview(clientId);
     }
 }

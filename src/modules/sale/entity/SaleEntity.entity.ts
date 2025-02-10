@@ -47,7 +47,13 @@ export class Sale {
   @Column()
   FollowUp: number;
 
-  @OneToOne(() => Tracking, (tracking) => tracking.Sale)
-  Tracking?: Tracking;
+  @Column({ type: 'int'})  
+  Traking: number;
+
+  @Column({ type: 'timestamp', nullable: true }) 
+  TrakingDate: Date;
+
+  @Column({ type: 'int' })  
+  SizeId: number;
 
 }
