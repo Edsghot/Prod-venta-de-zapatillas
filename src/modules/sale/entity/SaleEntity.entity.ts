@@ -1,8 +1,9 @@
 import { User } from "src/modules/user/entity/UserEntity.entity";
-import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Column, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Column, OneToMany, OneToOne } from "typeorm";
 import { Cart } from "src/modules/cart/entity/CartEntity.entity";
-import { Tracking } from "src/modules/traking/entity/TrackingEntity.entity";
+import { Tracking } from "src/modules/traking/entity/TrackingEntity.entity"; // Added import
 
+// Sale Entity
 @Entity()
 export class Sale {
   @PrimaryGeneratedColumn()
@@ -18,40 +19,41 @@ export class Sale {
   @Column({ type: 'boolean', default: false })
   PaymentMethod: boolean;
 
-  @Column({ nullable: true, default: '0000' })
+  @Column()
   PaymentNumber: string;
 
-  @Column({ nullable: true, default: '0000' })
+  @Column()
   CardNumber: string;
 
   @Column({ type: 'boolean', default: false })
   Process: boolean;
 
-  @Column('date', { default: () => 'CURRENT_TIMESTAMP' })
+  @Column('date')
   SaleDate: Date;
 
-  @Column('double', { default: 0 })
+  @Column('double')
   Total: number;
 
   @ManyToOne(() => Cart, (cart) => cart.Sales)
   @JoinColumn({ name: 'cartId' })
   Cart: Cart;
 
-  @Column({ type: 'int', default: 0, nullable: true })
+  @Column()
   idShipment: number;
 
-  @Column({ nullable: true, default: 'default.jpg' })
+  @Column()
   ImagePayment: string;
 
-  @Column({ type: 'int', default: 0, nullable: true })
+  @Column()
   FollowUp: number;
 
-  @Column({ type: 'int', default: 0, nullable: true })  
+  @Column({ type: 'int'})  
   Traking: number;
 
   @Column({ type: 'timestamp', nullable: true }) 
   TrakingDate: Date;
 
-  @Column({ type: 'int', default: 0, nullable: true })  
+  @Column({ type: 'int' })  
   SizeId: number;
+
 }

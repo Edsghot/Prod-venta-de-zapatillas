@@ -33,7 +33,7 @@ export class SaleController {
     @Get()
     async getAllSales() {
         return await this.saleService.getAllSales();
-    }
+    }z
 
     @Get('/getById/:id')
     async getSaleById(@Param('id') id: number) {
