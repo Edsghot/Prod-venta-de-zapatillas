@@ -9,8 +9,8 @@ import { CartModule } from './modules/cart/cart.module';
 import { ConfigModule } from '@nestjs/config';
 import { ShipmentModule } from './modules/shipment/shipment.module';
 import { AuthValidateModule } from './modules/auth-validate/auth-validate.module';
-import { TrakingModule } from './modules/traking/tracking.module'; // Reverted to original module name
-import { SizeProd } from './modules/product/entity/SizeEntity.entity';
+import { TrakingModule } from './modules/traking/tracking.module'; 
+import { SizeModuleModule } from './modules/size-module/size-module.module';
 
 @Module({
   imports: [
@@ -22,13 +22,14 @@ import { SizeProd } from './modules/product/entity/SizeEntity.entity';
       username: process.env.USERNAME_DB,
       password: process.env.PASSWORD_DB,
       database: process.env.DATABASE_DB,
-      entities: [__dirname + '/**/*.entity{.ts,.js}',SizeProd],
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
       extra: {
         charset: 'utf8mb4_unicode_ci',
       },
       driver: require('mysql2'),
     }),
+    SizeModuleModule,
     UserModule,
     ProductModule,
     SaleModule,
@@ -36,7 +37,8 @@ import { SizeProd } from './modules/product/entity/SizeEntity.entity';
     CartModule,
     ShipmentModule,
     AuthValidateModule,
-    TrakingModule, // Reverted to original module name
+    TrakingModule,
+     // Reverted to original module name
   ],
   controllers: [],
   providers: [CloudinaryService],

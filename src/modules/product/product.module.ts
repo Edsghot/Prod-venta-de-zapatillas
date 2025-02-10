@@ -6,11 +6,9 @@ import { UserService } from '../user/user.service';
 import { Product } from './entity/ProductEntity.entity';
 import { ProductService } from './product.service';
 import { CloudinaryService } from 'src/ServicesCloud/cloudinary/cloudinary.service';
-import { SizeProd } from './entity/SizeEntity.entity';
-
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Product]),TypeOrmModule.forFeature([SizeProd])
+    TypeOrmModule.forFeature([ Product]),  // Aquí se pasan ambas entidades en un solo arreglo
   ],
   providers: [ProductService,CloudinaryService],
   controllers: [ProductController]
