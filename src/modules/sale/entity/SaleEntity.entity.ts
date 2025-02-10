@@ -53,7 +53,4 @@ export class Sale {
   @Column({ type: 'timestamp', nullable: true }) 
   TrakingDate: Date;
 
-  @Column({ type: 'int' })  
-  SizeId: number;
-
 }
