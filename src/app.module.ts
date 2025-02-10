@@ -17,7 +17,7 @@ import { TrakingModule } from './modules/traking/tracking.module'; // Reverted t
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.HOST_DB,
-      port: 3306,
+      port: 43150,
       username: process.env.USERNAME_DB,
       password: process.env.PASSWORD_DB,
       database: process.env.DATABASE_DB,
