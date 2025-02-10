@@ -23,6 +23,10 @@ import { TrakingModule } from './modules/traking/tracking.module'; // Reverted t
       database: process.env.DATABASE_DB,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
+      extra: {
+        charset: 'utf8mb4_unicode_ci',
+      },
+      driver: require('mysql2'),
     }),
     UserModule,
     ProductModule,
