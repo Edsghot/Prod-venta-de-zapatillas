@@ -73,4 +73,9 @@ export class SaleController {
     async ValidateReview(@Param('clientId') clientId: number) {
         return await this.saleService.validateReview(clientId);
     }
+
+    @Get('/History/:clientId')
+    async GetHistory(@Param('clientId') clientId: number) {
+        return await this.saleService.GetHistory(clientId);
+    }
 }

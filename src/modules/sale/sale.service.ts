@@ -362,4 +362,66 @@ async updateTraking(data: TrakingUpdateRequest){
       };
     }
   }
+
+
+  async GetHistory(idClient: number) {
+    try {
+        const sales = await this.saleRepository.find({
+            where: { 
+                Client: { IdUser: idClient } 
+            },
+            relations: [
+                'Client',
+                'Cart',
+                'Cart.Items',
+                'Cart.Items.Product'
+            ],
+            order: {
+                SaleDate: 'DESC'
+            }
+        });
+
+        if (!sales || sales.length === 0) {
+            return {
+                msg: 'No purchase history found',
+                success: false,
+                data: []
+            };
+        }
+
+        const formattedHistory = sales.map(sale => ({
+            saleId: sale.IdSales,
+            saleDate: sale.SaleDate,
+            total: sale.Total,
+            paymentMethod: sale.PaymentMethod ? 'Card' : 'Cash',
+            shippingMethod: sale.ShippingMethod ? 'Delivery' : 'Store Pickup',
+            trackingNumber: sale.Traking,
+            trackingDate: sale.TrakingDate,
+            processStatus: sale.Process,
+            products: sale.Cart.Items.map(item => ({
+                productId: item.Product.IdProduct,
+                name: item.Product.Name,
+                quantity: item.Quantity,
+                sizeId: item.SizeId,
+                price: item.Product.Price,
+                imageUrl: item.Product.UrlImage
+            }))
+        }));
+
+        return {
+            msg: 'Purchase history retrieved successfully',
+            success: true,
+            data: formattedHistory
+        };
+
+    } catch (error) {
+        console.error('Error getting purchase history:', error);
+        return {
+            msg: 'Error retrieving purchase history',
+            detailMsg: error.message,
+            success: false,
+            data: []
+        };
+    }
+}
 }
