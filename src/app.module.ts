@@ -10,6 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ShipmentModule } from './modules/shipment/shipment.module';
 import { AuthValidateModule } from './modules/auth-validate/auth-validate.module';
 import { TrakingModule } from './modules/traking/tracking.module'; // Reverted to original module name
+import { SizeProd } from './modules/product/entity/SizeEntity.entity';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { TrakingModule } from './modules/traking/tracking.module'; // Reverted t
       username: process.env.USERNAME_DB,
       password: process.env.PASSWORD_DB,
       database: process.env.DATABASE_DB,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      entities: [__dirname + '/**/*.entity{.ts,.js}',SizeProd],
       synchronize: true,
       extra: {
         charset: 'utf8mb4_unicode_ci',
